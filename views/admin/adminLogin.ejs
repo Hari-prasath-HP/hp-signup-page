@@ -1,0 +1,112 @@
+<%- include('header') %> <!-- Include header -->
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h2 class="card-title text-center mb-4">Admin Login</h2>
+
+          <!-- Show error message if provided -->
+          <% if (error) { %>
+            <p style="color: red;"><%= error %></p>
+        <% } %>
+
+          <!-- Login Form -->
+          <form id="adminLoginForm" action="/adminLogin" method="post" onsubmit="validateAdminForm(event)">
+            <div class="mb-3">
+              <label for="email" class="form-label">Email:</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                class="form-control"
+                placeholder="Enter admin email"
+              >
+              <span id="emailError" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+              <label for="password" class="form-label">Password:</label>
+              <div class="input-group">
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  class="form-control"
+                  placeholder="Enter admin password"
+                >
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  id="togglePassword"
+                >
+                  Show
+                </button>
+              </div>
+              <span id="passwordError" class="text-danger small"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Login</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap JS (Optional for interactivity) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Custom Script for Validation -->
+<script>
+  // Show/Hide Password Functionality
+  document.getElementById("togglePassword").addEventListener("click", function () {
+    const passwordField = document.getElementById("password");
+    if (passwordField.type === "password") {
+      passwordField.type = "text";
+      this.textContent = "Hide";
+    } else {
+      passwordField.type = "password";
+      this.textContent = "Show";
+    }
+  });
+
+  // Form Validation
+  function validateAdminForm(event) {
+    event.preventDefault();
+
+    // Get form inputs
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    // Error spans
+    const emailError = document.getElementById("emailError");
+    const passwordError = document.getElementById("passwordError");
+
+    // Clear errors
+    emailError.textContent = "";
+    passwordError.textContent = "";
+
+    let isValid = true;
+
+    // Validate email
+    if (email === "") {
+      emailError.textContent = "Email is required.";
+      isValid = false;
+    }
+
+    // Validate password
+    if (password === "") {
+      passwordError.textContent = "Password is required.";
+      isValid = false;
+    }
+
+    // If valid, submit the form
+    if (isValid) {
+      document.getElementById("adminLoginForm").submit();
+    }
+  }
+</script>
+
+<%- include('footer') %> <!-- Include footer -->

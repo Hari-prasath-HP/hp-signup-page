@@ -173,7 +173,7 @@ document.getElementById("toggleConfirmPassword").addEventListener("click", funct
   isValid = false;
 } else {
   // Regex: Ensures no numbers after '@' and '.'
-  const emailPattern = /^[^\s@A-Z]+@[^\d\s@A-Z]+\.[^\d\s@A-Z]+$/;
+  const emailPattern = /^[^\s@A-Z]+@[^\s@A-Z]+\.[^\d\s@A-Z]+$/;
   if (!emailPattern.test(email)) {
     emailError.textContent = "Enter a valid email address(no capital letters) (no numbers after '@' or '.').";
     isValid = false;

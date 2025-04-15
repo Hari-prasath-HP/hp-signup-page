@@ -19,5 +19,8 @@ adminrouter.get('/editUser/:id',userController.routeedit);
 adminrouter.post('/updateUser/:id',userController.handleEdit);
 //get delete
 adminrouter.get('/deleteUser/:id', userController.handleDelete);
-
+// Route to block a user
+adminrouter.get('/blockUser/:id', userController.handleBlock);
+// Route to unblock a user
+adminrouter.get('/unblockUser/:id', userController.handleUnblock);
 module.exports = adminrouter;

@@ -51,7 +51,7 @@ exports.handleadminDashboard = async (req, res) => {
 
         // Fetch all user details from the database
         const users = await User.find({});
-
+        req.session.logged = true;
         // Ensure `users` is passed to the EJS view
         res.render('admin/adminDashboard', { users });
     } catch (err) {
@@ -157,6 +157,44 @@ exports.handleDelete = async (req, res) => {
     } catch (error) {
         console.error('Error deleting user:', error);
         res.status(500).json({ message: 'An error occurred while deleting the user.' });
+    }
+};
+
+// Block user
+exports.handleBlock = async (req, res) => {
+    try {
+        const { id } = req.params;
+        // Find the user by id and update the isBlocked field to true
+        const blockedUser = await User.findByIdAndUpdate(id, { isBlocked: true }, { new: true });
+
+        if (!blockedUser) {
+            return res.status(404).json({ message: 'User not found.' });
+        }
+
+        // Redirect to the admin dashboard after blocking
+        res.redirect('/adminDashboard');
+    } catch (error) {
+        console.error('Error blocking user:', error);
+        res.status(500).json({ message: 'An error occurred while blocking the user.' });
+    }
+};
+
+// Unblock user
+exports.handleUnblock = async (req, res) => {
+    try {
+        const { id } = req.params;
+        // Find the user by id and update the isBlocked field to false
+        const unblockedUser = await User.findByIdAndUpdate(id, { isBlocked: false }, { new: true });
+
+        if (!unblockedUser) {
+            return res.status(404).json({ message: 'User not found.' });
+        }
+
+        // Redirect to the admin dashboard after unblocking
+        res.redirect('/adminDashboard');
+    } catch (error) {
+        console.error('Error unblocking user:', error);
+        res.status(500).json({ message: 'An error occurred while unblocking the user.' });
     }
 };
 

@@ -21,7 +21,7 @@
             </thead>
             <tbody>
                 <% if (users && users.length > 0) { %>
-                    <% for(let i = 0; i < users.length; i++)  { %>
+                    <% for (let i = 0; i < users.length; i++) { %>
                         <tr>
                             <td><%= i + 1 %></td>
                             <td><%= users[i].username %></td>
@@ -30,6 +30,13 @@
                             <td>
                                 <a href="/editUser/<%= users[i]._id %>" class="btn btn-sm btn-warning me-2">Edit</a>
                                 <a href="/deleteUser/<%= users[i]._id %>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+
+                                <!-- Block/Unblock Button -->
+                                <% if (users[i].isBlocked) { %>
+                                    <a href="/unblockUser/<%= users[i]._id %>" class="btn btn-sm btn-success">Unblock</a>
+                                <% } else { %>
+                                    <a href="/blockUser/<%= users[i]._id %>" class="btn btn-sm btn-danger">Block</a>
+                                <% } %>
                             </td>
                         </tr>
                     <% } %>
@@ -151,31 +158,29 @@
             isValid = false;
         }
 
-// Validate Phone (Required if entered, valid format if provided)
-if (!phone) {
-    document.getElementById('phoneError').style.display = 'block';
-    document.getElementById('phoneError').textContent = 'Phone number is required.';
-    isValid = false;
-} else if (!/^\+?[0-9]{10,15}$/.test(phone)) {
-    document.getElementById('phoneError').style.display = 'block';
-    document.getElementById('phoneError').textContent = 'Please enter a valid phone number.';
-    isValid = false;
-}
+        // Validate Phone (Required if entered, valid format if provided)
+        if (!phone) {
+            document.getElementById('phoneError').style.display = 'block';
+            document.getElementById('phoneError').textContent = 'Phone number is required.';
+            isValid = false;
+        } else if (!/^\+?[0-9]{10,15}$/.test(phone)) {
+            document.getElementById('phoneError').style.display = 'block';
+            document.getElementById('phoneError').textContent = 'Please enter a valid phone number.';
+            isValid = false;
+        }
 
+        // Validate Password (Required, contains number, character, symbol, and length > 8)
+        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-// Validate Password (Required, contains number, character, symbol, and length > 8)
-const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-
-if (!password) {
-    document.getElementById('passwordError').style.display = 'block';
-    document.getElementById('passwordError').textContent = 'Password is required.';
-    isValid = false;
-} else if (!passwordRegex.test(password)) {
-    document.getElementById('passwordError').style.display = 'block';
-    document.getElementById('passwordError').textContent = 'Password must be at least 8 characters long and contain a number, a letter, and a special character.';
-    isValid = false;
-}
-
+        if (!password) {
+            document.getElementById('passwordError').style.display = 'block';
+            document.getElementById('passwordError').textContent = 'Password is required.';
+            isValid = false;
+        } else if (!passwordRegex.test(password)) {
+            document.getElementById('passwordError').style.display = 'block';
+            document.getElementById('passwordError').textContent = 'Password must be at least 8 characters long and contain a number, a letter, and a special character.';
+            isValid = false;
+        }
 
         if (isValid) {
             try {

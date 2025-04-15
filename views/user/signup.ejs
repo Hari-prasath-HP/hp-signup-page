@@ -1,95 +1,167 @@
-<%- include('header') %> <!-- Correct EJS syntax for including header -->
+<%- include('header') %>
 
 <div class="container py-5">
   <div class="row justify-content-center">
-    <div class="col-md-6">
-      <div class="card shadow-sm">
-        <div class="card-body">
-          <h2 class="card-title text-center mb-4">Registration Form</h2>
+    <div class="col-md-8 col-lg-6">
+      <div class="card shadow-lg rounded-4 border-0 overflow-hidden">
+        <!-- Gradient Header -->
+        <div class="card-header bg-gradient-primary py-4">
+          <h2 class="card-title text-center text-white mb-0 fw-bold">Create Your Account</h2>
+        </div>
+        
+        <div class="card-body px-5 py-4">
           <% if (error) { %>
-            <div class="alert alert-danger"><%= error %></div>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              <%= error %>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
           <% } %>
-          <form id="validationForm" action="/signup" method="post" onsubmit="validateForm(event)">
-            <div class="mb-3">
-              <label for="username" class="form-label">Username:</label>
-              <input
-                type="text"
-                id="username"
-                name="username"  
-                class="form-control"
-                placeholder="Enter username"
-              >
-              <span id="usernameError" class="error"></span>
-            </div>
-
-            <div class="mb-3">
-              <label for="email" class="form-label">Email:</label>
-              <input
-                id="email"
-                name="email"  
-                class="form-control"
-                placeholder="Enter email"
-              >
-              <span id="emailError" class="error"></span>
-            </div>
-
-            <div class="mb-3">
-              <label for="phone" class="form-label">Phone Number:</label>
-              <input
-                type="tel"
-                id="phone"
-                name="phone"
-                class="form-control"
-                placeholder="Enter phone number"
-              >
-              <span id="phoneError" class="error"></span>
-            </div>
-
-            <div class="mb-3">
-              <label for="password" class="form-label">Password:</label>
+          
+          <form id="validationForm" action="/signup" method="post" onsubmit="validateForm(event)" class="needs-validation" novalidate>
+            <!-- Username Field -->
+            <div class="mb-4 position-relative">
+              <label for="username" class="form-label fw-semibold">Username</label>
               <div class="input-group">
+                <span class="input-group-text bg-light">
+                  <i class="bi bi-person-fill text-muted"></i>
+                </span>
+                <input
+                  type="text"
+                  id="username"
+                  name="username"
+                  class="form-control form-control-lg py-2 px-3"
+                  placeholder="e.g. johndoe"
+                  required
+                >
+              </div>
+              <div class="invalid-feedback" id="usernameError">
+                Please choose a valid username.
+              </div>
+            </div>
+
+            <!-- Email Field -->
+            <div class="mb-4 position-relative">
+              <label for="email" class="form-label fw-semibold">Email Address</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light">
+                  <i class="bi bi-envelope-fill text-muted"></i>
+                </span>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  class="form-control form-control-lg py-2 px-3"
+                  placeholder="e.g. john@example.com"
+                  required
+                >
+              </div>
+              <div class="invalid-feedback" id="emailError">
+                Please provide a valid email.
+              </div>
+            </div>
+
+            <!-- Phone Field -->
+            <div class="mb-4 position-relative">
+              <label for="phone" class="form-label fw-semibold">Phone Number</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light">
+                  <i class="bi bi-phone-fill text-muted"></i>
+                </span>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  class="form-control form-control-lg py-2 px-3"
+                  placeholder="e.g. 9876543210"
+                  required
+                >
+              </div>
+              <div class="invalid-feedback" id="phoneError">
+                Please provide a valid phone number.
+              </div>
+            </div>
+
+            <!-- Password Field -->
+            <div class="mb-4 position-relative">
+              <label for="password" class="form-label fw-semibold">Password</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light">
+                  <i class="bi bi-lock-fill text-muted"></i>
+                </span>
                 <input
                   type="password"
                   id="password"
-                  name="password"  
-                  class="form-control"
-                  placeholder="Enter password"
+                  name="password"
+                  class="form-control form-control-lg py-2 px-3"
+                  placeholder="Create password"
+                  required
                 >
                 <button
                   type="button"
-                  class="btn btn-outline-secondary"
+                  class="input-group-text bg-light"
                   id="togglePassword"
                 >
-                  Show
+                  <i class="bi bi-eye-fill text-muted"></i>
                 </button>
               </div>
-              <span id="passwordError" class="error"></span>
+              <div class="form-text">
+                Must be 8+ characters with numbers & symbols
+              </div>
+              <div class="invalid-feedback" id="passwordError">
+                Please provide a valid password.
+              </div>
             </div>
 
-            <div class="mb-3">
-              <label for="confirmPassword" class="form-label">Confirm Password:</label>
+            <!-- Confirm Password Field -->
+            <div class="mb-4 position-relative">
+              <label for="confirmPassword" class="form-label fw-semibold">Confirm Password</label>
               <div class="input-group">
+                <span class="input-group-text bg-light">
+                  <i class="bi bi-lock-fill text-muted"></i>
+                </span>
                 <input
                   type="password"
                   id="confirmPassword"
                   name="confirmPassword"
-                  class="form-control"
+                  class="form-control form-control-lg py-2 px-3"
                   placeholder="Confirm password"
+                  required
                 >
                 <button
                   type="button"
-                  class="btn btn-outline-secondary"
+                  class="input-group-text bg-light"
                   id="toggleConfirmPassword"
                 >
-                  Show
+                  <i class="bi bi-eye-fill text-muted"></i>
                 </button>
               </div>
-              <span id="confirmPasswordError" class="error"></span>
+              <div class="invalid-feedback" id="confirmPasswordError">
+                Passwords must match.
+              </div>
             </div>
 
-            <button type="submit" class="btn btn-primary w-100">Submit</button>
-            <p class="pt-3">Already have an account? <a href="/">Login</a></p>
-            <p id="formMessage" class="success"></p>
+            <!-- Terms Checkbox -->
+            <div class="mb-4 form-check">
+              <input
+                type="checkbox"
+                class="form-check-input"
+                id="termsCheck"
+                required
+              >
+              <label class="form-check-label" for="termsCheck">
+                I agree to the <a href="#" class="text-primary">Terms and Conditions</a>
+              </label>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary btn-lg w-100 py-3 fw-bold rounded-pill shadow">
+              Create Account
+            </button>
+
+            <p class="text-center mb-0">
+              Already have an account? 
+              <a href="/" class="text-primary fw-semibold text-decoration-none">Sign In</a>
+            </p>
           </form>
         </div>
       </div>
@@ -97,134 +169,209 @@
   </div>
 </div>
 
-<!-- Bootstrap JS (Optional, for better interactivity) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="/static/validation.js"></script> <!-- Correct path for validation.js -->
-<script>
-    // Show/Hide Password
-document.getElementById("togglePassword").addEventListener("click", function () {
-    const passwordField = document.getElementById("password");
-    const toggleButton = document.getElementById("togglePassword");
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
+<!-- Custom CSS -->
+<style>
+  .bg-gradient-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
   
+  .card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
+  
+  .form-control {
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .form-control:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.25);
+  }
+  
+  .btn-primary {
+    background-color: #667eea;
+    border-color: #667eea;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-primary:hover {
+    background-color: #5a6fd1;
+    border-color: #5a6fd1;
+    transform: translateY(-2px);
+  }
+  
+  .error {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: block;
+  }
+  
+  .input-group-text {
+    transition: background-color 0.3s ease;
+  }
+  
+  .input-group:focus-within .input-group-text {
+    background-color: #e9ecef;
+  }
+</style>
+
+<!-- Bootstrap JS Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  // Enhanced Password Toggle with Icons
+  document.getElementById("togglePassword").addEventListener("click", function() {
+    const passwordField = document.getElementById("password");
+    const icon = this.querySelector("i");
+    
     if (passwordField.type === "password") {
       passwordField.type = "text";
-      toggleButton.textContent = "Hide";
+      icon.classList.replace("bi-eye-fill", "bi-eye-slash-fill");
     } else {
       passwordField.type = "password";
-      toggleButton.textContent = "Show";
+      icon.classList.replace("bi-eye-slash-fill", "bi-eye-fill");
     }
   });
-  // Show/Hide Password for Confirm Password Field
-document.getElementById("toggleConfirmPassword").addEventListener("click", function () {
-  const confirmPasswordField = document.getElementById("confirmPassword");
-  const toggleButton = document.getElementById("toggleConfirmPassword");
-
-  if (confirmPasswordField.type === "password") {
-    confirmPasswordField.type = "text";
-    toggleButton.textContent = "Hide";
-  } else {
-    confirmPasswordField.type = "password";
-    toggleButton.textContent = "Show";
-  }
-});
   
-  // Validation Function
+  document.getElementById("toggleConfirmPassword").addEventListener("click", function() {
+    const confirmPasswordField = document.getElementById("confirmPassword");
+    const icon = this.querySelector("i");
+    
+    if (confirmPasswordField.type === "password") {
+      confirmPasswordField.type = "text";
+      icon.classList.replace("bi-eye-fill", "bi-eye-slash-fill");
+    } else {
+      confirmPasswordField.type = "password";
+      icon.classList.replace("bi-eye-slash-fill", "bi-eye-fill");
+    }
+  });
+  
+  // Enhanced Validation with Real-time Feedback
   function validateForm(event) {
-    event.preventDefault();  // Prevent form submission if validation fails
-  
-    const email = document.getElementById("email").value.trim();  // Use .trim() directly
+    event.preventDefault();
+    event.stopPropagation();
+    
+    const form = event.target;
+    const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value.trim();
     const confirmPassword = document.getElementById("confirmPassword").value.trim();
     const username = document.getElementById("username").value.trim();
     const phone = document.getElementById("phone").value.trim();
-
-    const usernameError = document.getElementById("usernameError");
-    const phoneError = document.getElementById("phoneError");
-    const emailError = document.getElementById("emailError");
-    const passwordError = document.getElementById("passwordError");
-    const formMessage = document.getElementById("formMessage");
-    const confirmPasswordError = document.getElementById("confirmPasswordError");
-
-
-  // Clear previous error messages
-  usernameError.textContent = "";
-  emailError.textContent = "";
-  phoneError.textContent = "";
-  passwordError.textContent = "";
-  confirmPasswordError.textContent = "";
-  formMessage.textContent = "";
-  
+    const termsCheck = document.getElementById("termsCheck");
+    
+    // Clear previous error messages
+    document.querySelectorAll(".is-invalid").forEach(el => el.classList.remove("is-invalid"));
+    
     let isValid = true;
-  
-      // Validate username
-      if (username === "") {
-  usernameError.textContent = "Username is required.";
-  isValid = false;
-} else if (username.length < 3 || username.length > 20) {
-  usernameError.textContent = "Username must be between 3 and 20 characters.";
-  isValid = false;
-} else if (/\d/.test(username)) {  // Check if username contains numbers
-  usernameError.textContent = "Username cannot contain numbers.";
-  isValid = false;
-}
-
-  if (email === "") {
-  emailError.textContent = "Email is required.";
-  isValid = false;
-} else {
-  // Regex: Ensures no numbers after '@' and '.'
-  const emailPattern = /^[^\s@A-Z]+@[^\s@A-Z]+\.[^\d\s@A-Z]+$/;
-  if (!emailPattern.test(email)) {
-    emailError.textContent = "Enter a valid email address(no capital letters) (no numbers after '@' or '.').";
-    isValid = false;
-  }
-}
-
-
-  // Validate phone number
-if (phone === "") {
-  phoneError.textContent = "Phone number is required.";
-  isValid = false;
-} else {
-  const phonePattern = /^[0-9]{10}$/; // Allows only 10-digit phone numbers
-  if (!phonePattern.test(phone)) {
-    phoneError.textContent = "Enter a valid 10-digit phone number.";
-    isValid = false;
-  } else if (/^0{10}$/.test(phone)) { 
-    phoneError.textContent = "Phone number cannot be all zeros.";
-    isValid = false;
-  }
-}
-  
-    // Check if password is empty or contains leading/trailing spaces
+    
+    // Username Validation
+    if (username === "") {
+      showError("username", "Username is required.");
+      isValid = false;
+    } else if (username.length < 3 || username.length > 20) {
+      showError("username", "Username must be 3-20 characters.");
+      isValid = false;
+    } else if (/\d/.test(username)) {
+      showError("username", "Username cannot contain numbers.");
+      isValid = false;
+    }
+    
+    // Email Validation
+    if (email === "") {
+      showError("email", "Email is required.");
+      isValid = false;
+    } else {
+      const emailPattern = /^[^\s@A-Z]+@[^\s@A-Z]+\.[^\d\s@A-Z]+$/;
+      if (!emailPattern.test(email)) {
+        showError("email", "Enter a valid email (no caps/numbers after @ or .).");
+        isValid = false;
+      }
+    }
+    
+    // Phone Validation
+    if (phone === "") {
+      showError("phone", "Phone number is required.");
+      isValid = false;
+    } else {
+      const phonePattern = /^[0-9]{10}$/;
+      if (!phonePattern.test(phone)) {
+        showError("phone", "Enter a valid 10-digit number.");
+        isValid = false;
+      } else if (/^0{10}$/.test(phone)) {
+        showError("phone", "Phone number cannot be all zeros.");
+        isValid = false;
+      }
+    }
+    
+    // Password Validation
     if (password === "") {
-      passwordError.textContent = "Password is required.";
+      showError("password", "Password is required.");
       isValid = false;
     } else {
       const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
       if (!passwordPattern.test(password)) {
-        passwordError.textContent =
-          "Password must be at least 8 characters, include a number, and a special character.";
+        showError("password", "Must be 8+ chars with number & symbol.");
         isValid = false;
       }
     }
-
-  // Validate confirm password
-  if (confirmPassword === "") {
-    confirmPasswordError.textContent = "Confirm Password is required.";
-    isValid = false;
-  } else if (confirmPassword !== password) {
-    confirmPasswordError.textContent = "Confirm password should match the password.";
-    isValid = false;
-  }
-  
+    
+    // Confirm Password Validation
+    if (confirmPassword === "") {
+      showError("confirmPassword", "Please confirm your password.");
+      isValid = false;
+    } else if (confirmPassword !== password) {
+      showError("confirmPassword", "Passwords don't match.");
+      isValid = false;
+    }
+    
+    // Terms Check Validation
+    if (!termsCheck.checked) {
+      termsCheck.classList.add("is-invalid");
+      isValid = false;
+    }
+    
+    // Submit if valid
     if (isValid) {
-      document.getElementById("validationForm").submit();
-
-        // document.getElementById("validationForm").reset();
-        // Remove location.reload(); to avoid reloading the page
-
+      // Show loading state
+      const submitBtn = form.querySelector("button[type='submit']");
+      const originalText = submitBtn.innerHTML;
+      submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Creating account...';
+      submitBtn.disabled = true;
+      
+      // Simulate network delay (remove in production)
+      setTimeout(() => {
+        form.submit();
+      }, 1500);
+    } else {
+      form.classList.add("was-validated");
     }
   }
+  
+  function showError(fieldId, message) {
+    const field = document.getElementById(fieldId);
+    const errorElement = document.getElementById(`${fieldId}Error`);
+    
+    field.classList.add("is-invalid");
+    errorElement.textContent = message;
+  }
+  
+  // Real-time validation on blur
+  document.querySelectorAll("input").forEach(input => {
+    input.addEventListener("blur", function() {
+      if (this.value.trim() !== "") {
+        this.classList.remove("is-invalid");
+      }
+    });
+  });
 </script>
-<%- include('footer') %> <!-- Correct EJS syntax for including footer -->
+
+<%- include('footer') %>

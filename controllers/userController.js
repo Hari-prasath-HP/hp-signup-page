@@ -109,7 +109,8 @@ exports.handleLogin = async (req, res) => {
         }
         res.render('user/home',{
             username: user.username, 
-            phone: user.phone 
+            phone: user.phone,
+            email: user.email
         })
     }catch(err){
         console.error('Error fetching user data:', err);

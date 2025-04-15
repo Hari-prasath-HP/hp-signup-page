@@ -1,123 +1,205 @@
-<%- include('header') %> <!-- Correct EJS syntax for including header -->
+<%- include('header') %>
 
 <div class="container py-5">
   <div class="row justify-content-center">
-    <div class="col-md-6">
-      <div class="card shadow-sm">
-        <div class="card-body">
-          <h2 class="card-title text-center mb-4">Login Form</h2>
-          
+    <div class="col-md-8 col-lg-6">
+      <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+          <h2 class="card-title text-center mb-0 py-2">Welcome Back</h2>
+        </div>
+        <div class="card-body px-5 py-4">
           <% if (error) { %>
-            <div class="alert alert-danger"><%= error %></div>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              <%= error %>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
           <% } %>
           
-          <form id="validationForm" action="/login" method="post" onsubmit="validateForm(event)">
-
-            <div class="mb-3">
-              <label for="email" class="form-label">Email:</label>
-              <input
-                id="email"
-                name="email"  
-                class="form-control"
-                placeholder="Enter email"
-              >
-              <span id="emailError" class="error text-danger"></span>
+          <form id="validationForm" action="/login" method="post" onsubmit="validateForm(event)" novalidate>
+            <div class="mb-4">
+              <label for="email" class="form-label fw-bold">Email Address</label>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="bi bi-envelope-fill"></i>
+                </span>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  class="form-control form-control-lg"
+                  placeholder="your@email.com"
+                  autocomplete="username"
+                >
+              </div>
+              <span id="emailError" class="error text-danger small"></span>
             </div>
 
-            <div class="mb-3">
-              <label for="password" class="form-label">Password:</label>
+            <div class="mb-4">
+              <label for="password" class="form-label fw-bold">Password</label>
               <div class="input-group">
+                <span class="input-group-text">
+                  <i class="bi bi-lock-fill"></i>
+                </span>
                 <input
                   type="password"
                   id="password"
-                  name="password"  
-                  class="form-control"
-                  placeholder="Enter password"
+                  name="password"
+                  class="form-control form-control-lg"
+                  placeholder="Enter your password"
+                  autocomplete="current-password"
                 >
                 <button
                   type="button"
                   class="btn btn-outline-secondary"
                   id="togglePassword"
+                  aria-label="Toggle password visibility"
                 >
-                  Show
+                  <i class="bi bi-eye-fill" id="toggleIcon"></i>
                 </button>
               </div>
-              <span id="passwordError" class="error text-danger"></span>
+              <span id="passwordError" class="error text-danger small"></span>
             </div>
 
-            <button type="submit" class="btn btn-primary w-100">Submit</button>
-            <p class="pt-3">Don't have an account? <a href="/signup">Create new account</a></p>
-            <p id="formMessage" class="success"></p>
+            <div class="d-grid mb-3">
+              <button type="submit" class="btn btn-primary btn-lg rounded-pill py-2 fw-bold">
+                <i class="bi bi-box-arrow-in-right me-2"></i>Login
+              </button>
+            </div>
+            
+            <div class="text-center pt-3 border-top">
+              <p class="mb-2">Don't have an account?</p>
+              <a href="/signup" class="btn btn-outline-primary rounded-pill px-4">
+                Create new account
+              </a>
+            </div>
+            
+            <div id="formMessage" class="alert alert-success mt-3 d-none"></div>
           </form>
         </div>
+      </div>
+      
+      <div class="text-center mt-4">
+        <p class="text-muted small">By continuing, you agree to our <a href="/terms" class="text-decoration-none">Terms of Service</a> and <a href="/privacy" class="text-decoration-none">Privacy Policy</a>.</p>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Bootstrap JS (Optional, for better interactivity) -->
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
+<!-- Bootstrap JS Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="/static/validation.js"></script> <!-- Correct path for validation.js -->
 
 <script>
-  // Show/Hide Password
+  // Enhanced Show/Hide Password with icon toggle
   document.getElementById("togglePassword").addEventListener("click", function () {
     const passwordField = document.getElementById("password");
-    const toggleButton = document.getElementById("togglePassword");
-  
+    const toggleIcon = document.getElementById("toggleIcon");
+    
     if (passwordField.type === "password") {
       passwordField.type = "text";
-      toggleButton.textContent = "Hide";
+      toggleIcon.classList.remove("bi-eye-fill");
+      toggleIcon.classList.add("bi-eye-slash-fill");
+      this.setAttribute("aria-label", "Hide password");
     } else {
       passwordField.type = "password";
-      toggleButton.textContent = "Show";
+      toggleIcon.classList.remove("bi-eye-slash-fill");
+      toggleIcon.classList.add("bi-eye-fill");
+      this.setAttribute("aria-label", "Show password");
     }
   });
   
-  // Validation Function
+  // Enhanced Validation with real-time feedback
   function validateForm(event) {
-    event.preventDefault();  // Prevent form submission if validation fails
-  
-    const email = document.getElementById("email").value.trim();  // Use .trim() directly
+    event.preventDefault();
+    
+    const form = document.getElementById("validationForm");
+    const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value.trim();
-
     const emailError = document.getElementById("emailError");
     const passwordError = document.getElementById("passwordError");
     const formMessage = document.getElementById("formMessage");
-
-    // Clear previous error messages
+    
+    // Reset states
     emailError.textContent = "";
     passwordError.textContent = "";
-    formMessage.textContent = "";
-  
+    formMessage.classList.add("d-none");
+    form.querySelectorAll(".is-invalid").forEach(el => el.classList.remove("is-invalid"));
+    
     let isValid = true;
-
+    
     // Email Validation
-    if (email === "") {
-      emailError.textContent = "Email is required.";
+    if (!email) {
+      emailError.textContent = "Email is required";
+      document.getElementById("email").classList.add("is-invalid");
       isValid = false;
-    } else {
-      // Regex: Ensures no numbers after '@' and '.'
-      const emailPattern = /^[^\s@]+@[^\d\s@]+\.[^\d\s@]+$/;
-      if (!emailPattern.test(email)) {
-        emailError.textContent = "Enter a valid email address.";
-        isValid = false;
-      }
+    } else if (!/^[^\s@]+@[^\d\s@]+\.[^\d\s@]+$/.test(email)) {
+      emailError.textContent = "Please enter a valid email address";
+      document.getElementById("email").classList.add("is-invalid");
+      isValid = false;
     }
-
+    
     // Password Validation
-    if (password === "") {
-      passwordError.textContent = "Password is required.";
+    if (!password) {
+      passwordError.textContent = "Password is required";
+      document.getElementById("password").classList.add("is-invalid");
       isValid = false;
     } else if (password.length < 6) {
-      passwordError.textContent = "Password must be at least 6 characters.";
+      passwordError.textContent = "Password must be at least 6 characters";
+      document.getElementById("password").classList.add("is-invalid");
       isValid = false;
     }
-  
+    
     if (isValid) {
-      document.getElementById("validationForm").submit();
+      // Show loading state
+      const submitBtn = form.querySelector("button[type='submit']");
+      const originalText = submitBtn.innerHTML;
+      submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Logging in...';
+      submitBtn.disabled = true;
+      
+      // Simulate network delay (remove in production)
+      setTimeout(() => {
+        form.submit();
+      }, 1500);
+    }
+  }
+  
+  // Add real-time validation on blur
+  document.getElementById("email").addEventListener("blur", validateEmail);
+  document.getElementById("password").addEventListener("blur", validatePassword);
+  
+  function validateEmail() {
+    const email = document.getElementById("email").value.trim();
+    const emailError = document.getElementById("emailError");
+    
+    if (!email) {
+      emailError.textContent = "Email is required";
+      document.getElementById("email").classList.add("is-invalid");
+    } else if (!/^[^\s@]+@[^\d\s@]+\.[^\d\s@]+$/.test(email)) {
+      emailError.textContent = "Please enter a valid email address";
+      document.getElementById("email").classList.add("is-invalid");
+    } else {
+      emailError.textContent = "";
+      document.getElementById("email").classList.remove("is-invalid");
+    }
+  }
+  
+  function validatePassword() {
+    const password = document.getElementById("password").value.trim();
+    const passwordError = document.getElementById("passwordError");
+    
+    if (!password) {
+      passwordError.textContent = "Password is required";
+      document.getElementById("password").classList.add("is-invalid");
+    } else if (password.length < 6) {
+      passwordError.textContent = "Password must be at least 6 characters";
+      document.getElementById("password").classList.add("is-invalid");
+    } else {
+      passwordError.textContent = "";
+      document.getElementById("password").classList.remove("is-invalid");
     }
   }
 </script>
 
-<%- include('footer') %> <!-- Correct EJS syntax for including footer -->
+<%- include('footer') %>

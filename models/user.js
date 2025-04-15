@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true},
   phone: { type: String, required: true },
   password: { type: String, required: true },
+  isBlocked: { type: Boolean, default: false },
 });
 
 // Create the User model from the schema
